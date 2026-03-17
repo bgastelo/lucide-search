@@ -37,7 +37,16 @@ export function loadIcons() {
   }
 
   // 2. User cache (written by `lucide update`), else bundled data
-  const dataFile = existsSync(CACHE_FILE) ? CACHE_FILE : BUNDLED_DATA;
+  const dataFile = existsSync(CACHE_FILE) ? CACHE_FILE
+                 : existsSync(BUNDLED_DATA) ? BUNDLED_DATA
+                 : null;
+
+  if (!dataFile) {
+    throw new Error(
+      'No icon data found. Run `lucide update` to download the latest Lucide icon set.'
+    );
+  }
+
   _cache = JSON.parse(readFileSync(dataFile, 'utf8'));
   return _cache;
 }

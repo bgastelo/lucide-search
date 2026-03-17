@@ -286,6 +286,22 @@ function cmdHelp() {
 
 // ─── Entry point ──────────────────────────────────────────────────────────────
 
+// Catch missing icon data before anything else runs.
+// This happens on a fresh clone where data/ is gitignored and no cache exists yet.
+import { existsSync } from 'fs';
+import { CACHE_FILE } from './search-engine.mjs';
+import { fileURLToPath } from 'url';
+const _bundled = fileURLToPath(new URL('../data/icons.json', import.meta.url));
+
+if (!existsSync(CACHE_FILE) && !existsSync(_bundled) && !process.env.LUCIDE_ICONS_PATH) {
+  console.error(`
+  ${c.red}${c.bold}No icon data found.${c.reset}
+
+  Run ${c.bold}${c.cyan}lucide update${c.reset} to download the latest Lucide icon set.
+`);
+  process.exit(1);
+}
+
 const [, , cmd, ...rest] = process.argv;
 
 switch (cmd) {
