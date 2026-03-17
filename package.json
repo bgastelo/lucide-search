@@ -1,0 +1,22 @@
+{
+  "name": "lucide-search",
+  "version": "1.0.0",
+  "description": "CLI + MCP server for searching Lucide icons by name, tag, or semantic meaning",
+  "type": "module",
+  "bin": {
+    "lucide": "./src/cli.mjs"
+  },
+  "scripts": {
+    "build-data": "node scripts/build-data.mjs",
+    "mcp": "node src/mcp-server.mjs"
+  },
+  "files": [
+    "src/",
+    "data/icons.json"
+  ],
+  "engines": {
+    "node": ">=18"
+  },
+  "keywords": ["lucide", "icons", "search", "mcp", "cli"],
+  "license": "MIT"
+}
