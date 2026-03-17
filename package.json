@@ -7,7 +7,6 @@
     "lucide": "./src/cli.mjs"
   },
   "scripts": {
-    "build-data": "node scripts/build-data.mjs",
     "mcp": "node src/mcp-server.mjs"
   },
   "files": [
