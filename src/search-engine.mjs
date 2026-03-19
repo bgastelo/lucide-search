@@ -95,8 +95,8 @@ function scoreIcon(name, icon, queryWords) {
   for (const word of queryWords) {
     // ── Name matching ──────────────────────────────────────────────────────
     if (nameLower === word)               { score += 100; }
+    else if (nameParts.includes(word))    { score += 90; }  // exact segment beats prefix
     else if (nameLower.startsWith(word))  { score += 75; }
-    else if (nameParts.includes(word))    { score += 65; }
     else if (nameLower.includes(word))    { score += 45; }
 
     // ── Alias matching ─────────────────────────────────────────────────────
@@ -115,6 +115,18 @@ function scoreIcon(name, icon, queryWords) {
     aliasLower.some(a => a.includes(word))
   );
   if (allMatched && queryWords.length > 1) score += 30;
+
+  // Strong bonus: every query word is a part of the icon name itself
+  // e.g. "chevron left" → "chevron-left" should always beat icons that only
+  // mention these words in their tags (like "between-horizontal-end")
+  const allInName = queryWords.length > 1 &&
+    queryWords.every(word => nameParts.includes(word));
+  if (allInName) score += 50;
+
+  // Perfect name match: the query words compose the entire icon name with no
+  // extra parts — "chevron left" → "chevron-left" beats "circle-chevron-left"
+  const perfectNameMatch = allInName && queryWords.length === nameParts.length;
+  if (perfectNameMatch) score += 30;
 
   return score;
 }
